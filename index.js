@@ -10,7 +10,11 @@ const navigation2 = document.getElementById("container2");
 const line2 = document.getElementById("hr2");
 const thirdText = document.getElementById("text2");
 
-const sections = document.querySelectorAll("section"); // Assuming your sections have the <section> tag
+const navigation3 = document.getElementById("container3");
+const line3 = document.getElementById("hr3");
+const fourthText = document.getElementById("text3");
+
+const sections = document.querySelectorAll("section");
 
 const resetStyles = () => {
   // Reset all to default
@@ -22,6 +26,9 @@ const resetStyles = () => {
 
   thirdText.style.color = "#64748B";
   line2.style.width = "32px";
+
+  fourthText.style.color = "#64748B";
+  line3.style.width = "32px";
 };
 
 const applyActiveStyles = (text, line) => {
@@ -29,7 +36,7 @@ const applyActiveStyles = (text, line) => {
   text.style.color = "white";
   line.style.width = "56px";
   line.style.transition = "width 0.3s ease, color 0.3s ease";
-  line.style.backgroundColor = "#64748B";
+  line.style.color = "white";
 };
 
 const navStyling = (text, line) => {
@@ -41,12 +48,13 @@ const navStyling = (text, line) => {
 navigation.addEventListener("click", () => navStyling(firstText, line));
 navigation1.addEventListener("click", () => navStyling(secondText, line1));
 navigation2.addEventListener("click", () => navStyling(thirdText, line2));
+navigation3.addEventListener("click", () => navStyling(fourthText, line3));
 
 // Set up IntersectionObserver to detect when sections are in view
 const observerOptions = {
   root: null,
   rootMargin: "0px",
-  threshold: 0.5, // Trigger when 50% of the section is in view
+  threshold: 0.1,
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -62,6 +70,9 @@ const observer = new IntersectionObserver((entries) => {
         case "section3":
           navStyling(thirdText, line2);
           break;
+        case "section4":
+          navStyling(fourthText, line3);
+          break;
         default:
           resetStyles();
           break;
@@ -74,24 +85,18 @@ sections.forEach((section) => {
   observer.observe(section);
 });
 
+let mouseX = 0;
+let mouseY = 0;
+
 document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX + window.scrollX;
+  mouseY = e.clientY + window.scrollY;
+
   const glow = document.getElementById("glow");
-
-  // Calculate the position including the scroll offset
-  const x = e.clientX + window.scrollX;
-  const y = e.clientY + window.scrollY;
-
-  // Move the neon glow to the cursor position
-  glow.style.transform = `translate(${x}px, ${y}px)`;
+  glow.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
 });
 
 document.addEventListener("scroll", () => {
   const glow = document.getElementById("glow");
-
-  // Recalculate the position based on the current mouse position and scroll offset
-  const x = event.clientX + window.scrollX;
-  const y = event.clientY + window.scrollY;
-
-  // Move the neon glow to the adjusted position
-  glow.style.transform = `translate(${x}px, ${y}px)`;
+  glow.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
 });
